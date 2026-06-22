@@ -19,8 +19,7 @@ export async function updateProfile(
   // 2. 校验输入
   const parsed = profileSchema.safeParse({
     username: formData.get('username'),
-    fullName: formData.get('fullName'),
-    website: formData.get('website'),
+    full_name: formData.get('full_name'),
   })
 
   if (!parsed.success) {

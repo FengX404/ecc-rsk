@@ -14,12 +14,9 @@ const nextConfig = {
     ]
   },
 
-  // 实验性功能
-  experimental: {
-    // 启用 Server Actions
-    serverActions: {
-      bodySizeLimit: '2mb'
-    }
+  // Server Actions 配置
+  serverActions: {
+    bodySizeLimit: '2mb'
   },
 
   // 环境变量验证

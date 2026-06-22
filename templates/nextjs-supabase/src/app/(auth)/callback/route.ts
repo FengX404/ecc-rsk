@@ -6,8 +6,12 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code')
 
   if (code) {
-    const supabase = createClient()
-    await supabase.auth.exchangeCodeForSession(code)
+    try {
+      const supabase = createClient()
+      await supabase.auth.exchangeCodeForSession(code)
+    } catch {
+      return NextResponse.redirect(`${requestUrl.origin}/login?error=auth_failed`)
+    }
   }
 
   return NextResponse.redirect(requestUrl.origin)

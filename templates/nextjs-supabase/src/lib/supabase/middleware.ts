@@ -36,7 +36,14 @@ export async function updateSession(request: NextRequest) {
     data: { user }
   } = await supabase.auth.getUser()
 
-  if (!user && !request.nextUrl.pathname.startsWith('/login')) {
+  const publicPaths = ['/login', '/register', '/callback', '/']
+  const isPublicPath = publicPaths.some(
+    (path) =>
+      request.nextUrl.pathname === path ||
+      (path === '/callback' && request.nextUrl.pathname.startsWith('/callback'))
+  )
+
+  if (!user && !isPublicPath) {
     // 未登录用户重定向到登录页
     const url = request.nextUrl.clone()
     url.pathname = '/login'
