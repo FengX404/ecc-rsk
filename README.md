@@ -18,23 +18,23 @@
 
 **macOS / Linux**：
 ```bash
-git clone --recurse-submodules https://github.com/<your-org>/ecc-rsk.git
+git clone --recurse-submodules https://github.com/FengX404/ecc-rsk.git
 cd ecc-rsk
 ./install.sh
 ```
 
 **Windows**：
 ```powershell
-git clone --recurse-submodules https://github.com/<your-org>/ecc-rsk.git
+git clone --recurse-submodules https://github.com/FengX404/ecc-rsk.git
 cd ecc-rsk
-# 推荐：复制模式（无需特殊权限，ZIP 下载也可用）
+# 复制模式（推荐，无需特殊权限）
 .\install.ps1 -UseCopy
 
-# 或使用 symlink 模式（需要 Developer Mode 或管理员权限）
+# Symlink 模式（需 Developer Mode 或管理员权限，部分 IDE 索引可能异常）
 .\install.ps1
 ```
 
-> **Windows 用户注意**：推荐使用 `-UseCopy` 模式。Symlink 模式在 Windows 上需要 Developer Mode 或管理员权限，且 GitHub ZIP 下载、部分 IDE 索引可能异常。`-UseCopy` 模式将文件复制到本地，无上述限制，缺点是 ECC 更新后需要手动重新运行 `.\install.ps1 -UseCopy` 同步。
+> **Windows 用户**：推荐 `-UseCopy` 模式，无权限限制且兼容 ZIP 下载。缺点是 ECC 更新后需手动重新运行 `.\install.ps1 -UseCopy` 同步。
 
 ### 同步 ECC 更新
 
@@ -70,12 +70,12 @@ ECC-RSK 可用于以下 AI 编程助手：
 
 **社区维护**（可用，但不保证及时跟进 ECC 更新）：
 
+- **Kiro** — 配置 `.kiro/`（仅 ECC 提供，位于 `ecc/` 子目录内，RSK 未扩展）
 - **opencode** — 配置 `.opencode/`
 - **Qoder** — 配置 `.qoder/`
 - **CodeBuddy** — 配置 `.codebuddy/`
-- **Kiro** — 配置 `.kiro/`（仅 ECC 提供，RSK 未扩展）
 
-> **维护等级说明**：核心维护的 IDE 适配会随 ECC-RSK 版本同步更新；社区维护的 IDE 适配由社区贡献，可能滞后于主版本。如遇问题，欢迎 PR。
+> **维护等级说明**：核心维护由 ECC-RSK 官方团队跟进，确保与 ECC 版本同步更新；社区维护由社区贡献者维护，可能滞后于主版本，适合非关键场景使用。升级为核心维护需满足：有活跃维护者 + 通过功能完整性验证。如遇问题，欢迎 PR。
 
 ---
 
@@ -102,7 +102,7 @@ ECC-RSK 采用 **Git Submodule + Symlink** 架构：
 |---|---|---|
 | Agents | 17 | planner、architect、react-reviewer、tdd-guide、e2e-runner 等 |
 | Skills | 14 | api-design、blueprint、browser-qa、council、gateguard 等 |
-| Commands | ~40 | plan、code-review、build-fix、react-build、learn、prp-* 等 |
+| Commands | 34 | plan、code-review、build-fix、react-build、learn、prp-* 等 |
 | Rules | 5 套 | common、react、typescript、web、nuxt |
 
 ### ECC-RSK 新增（本地维护）
@@ -177,7 +177,7 @@ ECC-RSK 基于以下项目构建：
 
 - [Everything Claude Code (ECC)](https://github.com/affaan-m/ECC) — 跨语言、跨 harness 的通用 AI 编程操作系统
 - [Claude Code](https://claude.ai/code) — Anthropic 的 AI 编程助手
-- [TRAE](https://www.trae.com.cn) — 字节跳动的 AI 编程 IDE
+- [TRAE](https://www.trae.com.cn) — 字节跳动的 AI 编程助手
 - [Next.js](https://nextjs.org) — React 全栈框架
 - [Supabase](https://supabase.com) — 开源 Firebase 替代方案
 - [Vercel](https://vercel.com) — Next.js 原生部署平台

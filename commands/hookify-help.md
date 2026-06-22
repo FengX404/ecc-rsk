@@ -1,1 +1,0 @@
-../ecc/commands/hookify-help.md

@@ -68,11 +68,11 @@ ECC-RSK 所有内容基于以下技术栈：
 
 ## 可用 Commands
 
-### 复用 ECC（~40 个）
+### 复用 ECC（34 个）
 
 - `/plan`、`/code-review`、`/build-fix`、`/test-coverage`、`/refactor-clean`
 - `/react-build`、`/react-review`、`/react-test`
-- `/learn`、`/skill-create`、`/pr`、`/review-pr`
+- `/learn`、`/pr`、`/review-pr`
 - `/prp-*` 系列、`/epic-*` 系列、`/multi-*` 系列
 
 ### ECC-RSK 新增（6 个）

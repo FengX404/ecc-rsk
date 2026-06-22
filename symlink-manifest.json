@@ -49,23 +49,15 @@
     "refactor-clean.md",
     "update-docs.md",
     "security-scan.md",
-    "quality-gate.md",
-    "project-init.md",
     "pr.md",
     "review-pr.md",
     "react-build.md",
     "react-review.md",
     "react-test.md",
     "checkpoint.md",
-    "save-session.md",
-    "resume-session.md",
-    "sessions.md",
     "aside.md",
     "learn.md",
     "learn-eval.md",
-    "evolve.md",
-    "skill-create.md",
-    "skill-health.md",
     "prp-commit.md",
     "prp-implement.md",
     "prp-plan.md",
@@ -80,20 +72,8 @@
     "epic-validate.md",
     "multi-plan.md",
     "multi-execute.md",
-    "multi-frontend.md",
-    "multi-backend.md",
     "multi-workflow.md",
-    "auto-update.md",
-    "prune.md",
-    "promote.md",
-    "model-route.md",
-    "cost-report.md",
-    "harness-audit.md",
-    "hookify.md",
-    "hookify-list.md",
-    "hookify-help.md",
-    "setup-pm.md",
-    "projects.md"
+    "auto-update.md"
   ],
 
   "rules": [
@@ -120,9 +100,29 @@
   "_notes": {
     "agents": "17 agents from ecc/agents/ → agents/",
     "skills": "14 skill dirs from ecc/skills/ → skills/",
-    "commands": "~40 commands from ecc/commands/ → commands/",
+    "commands": "34 commands from ecc/commands/ → commands/ (trimmed for RSK stack, see excluded_commands)",
     "rules": "5 rule dirs from ecc/rules/ → rules/",
     "misc_files": "Individual files with custom source→target mapping",
     "misc_dirs": "Directories symlinked as a whole"
+  },
+
+  "_excluded_commands": {
+    "_description": "ECC commands intentionally excluded from RSK symlink manifest. These are either outside the RSK tech stack or ECC-internal tooling.",
+    "non_rsk_stack": {
+      "_reason": "RSK uses fixed stack: Next.js frontend + Supabase backend",
+      "commands": ["multi-frontend.md", "multi-backend.md"]
+    },
+    "ecc_internal_ops": {
+      "_reason": "ECC harness internals not relevant to RSK end users",
+      "commands": ["hookify.md", "hookify-list.md", "hookify-help.md", "setup-pm.md", "harness-audit.md", "model-route.md", "cost-report.md", "prune.md", "promote.md"]
+    },
+    "ecc_session_learning": {
+      "_reason": "ECC session/learning subsystem, low relevance for RSK-focused development",
+      "commands": ["save-session.md", "resume-session.md", "sessions.md", "evolve.md", "skill-create.md", "skill-health.md"]
+    },
+    "ecc_project_mgmt": {
+      "_reason": "RSK uses fullstack-init instead of project-init; quality-gate overlaps with security-scan",
+      "commands": ["project-init.md", "quality-gate.md"]
+    }
   }
 }

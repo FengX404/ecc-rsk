@@ -1,1 +1,0 @@
-../ecc/commands/promote.md

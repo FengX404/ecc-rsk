@@ -56,7 +56,7 @@ git commit -m "sync: update ECC submodule"
 
 - **Agents**：planner、architect、react-reviewer、tdd-guide、e2e-runner 等（17 个）
 - **Skills**：api-design、blueprint、browser-qa、council、gateguard 等（14 个）
-- **Commands**：plan、code-review、build-fix、react-build、learn 等（~40 个）
+- **Commands**：plan、code-review、build-fix、react-build、learn 等（34 个，从 ECC 裁剪）
 - **Rules**：common、react、typescript、web、nuxt（5 套）
 
 ### ECC-RSK 新增

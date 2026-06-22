@@ -1,3 +1,275 @@
+#Requires -Version 5.1
+
+<#
+.SYNOPSIS
+    ECC-RSK Installation Script for Windows
+.DESCRIPTION
+    Reads symlink-manifest.json to create symlinks (or copies) from ECC submodule.
+.PARAMETER SymlinksOnly
+    Only recreate symlinks, skip mkdir.
+.PARAMETER Verify
+    Verify all symlinks resolve correctly, then exit.
+.PARAMETER UseCopy
+    Copy files instead of creating symlinks (no admin/DevMode required).
+    Run this again after ECC submodule updates to resync.
+.EXAMPLE
+    .\install.ps1
+    .\install.ps1 -UseCopy
+    .\install.ps1 -Verify
+    .\install.ps1 -SymlinksOnly
+#>
+
+param(
+    [switch]$SymlinksOnly,
+    [switch]$Verify,
+    [switch]$UseCopy,
+    [switch]$Help
+)
+
+$ErrorActionPreference = "Stop"
+
+function Write-Usage {
+    Write-Host "Usage: .\install.ps1 [-SymlinksOnly] [-Verify] [-UseCopy]"
+    Write-Host ""
+    Write-Host "Options:"
+    Write-Host "  -SymlinksOnly   Only recreate symlinks, skip mkdir"
+    Write-Host "  -Verify         Verify all symlinks resolve correctly"
+    Write-Host "  -UseCopy        Copy files instead of symlinks (no admin required)"
+    Write-Host "  -Help           Show this help"
+    exit 0
+}
+
+if ($Help) { Write-Usage }
+
+$Manifest = "symlink-manifest.json"
+
+# Check manifest exists
+if (-not (Test-Path $Manifest)) {
+    Write-Host "Error: $Manifest not found in current directory." -ForegroundColor Red
+    Write-Host "This script must be run from the ecc-rsk project root."
+    exit 1
+}
+
+# Load manifest
+$manifest = Get-Content $Manifest -Raw | ConvertFrom-Json
+
+# Verify mode
+if ($Verify) {
+    Write-Host "=== ECC-RSK Symlink Verification ===" -ForegroundColor Cyan
+    Write-Host ""
+
+    # Find broken symlinks (junctions/symlinks pointing to non-existent targets)
+    $dirs = @("agents", "skills", "commands", "rules", "hooks", "contexts", "schemas")
+    $broken = @()
+    foreach ($dir in $dirs) {
+        if (-not (Test-Path $dir)) { continue }
+        Get-ChildItem -Path $dir -Force | Where-Object {
+            $_.LinkType -and -not (Test-Path $_.Target -ErrorAction SilentlyContinue)
+        } | ForEach-Object { $broken += $_.FullName }
+    }
+
+    if ($broken.Count -gt 0) {
+        Write-Host "Broken symlinks:" -ForegroundColor Red
+        $broken | ForEach-Object { Write-Host "  $_" }
+        exit 1
+    }
+
+    # Count expected vs actual
+    $expected  = @($manifest.agents).Count
+    $expected += @($manifest.skills).Count
+    $expected += @($manifest.commands).Count
+    $expected += @($manifest.rules).Count
+    $expected += @($manifest.misc_files).Count
+    $expected += @($manifest.misc_dirs).Count
+
+    $actual = 0
+    foreach ($dir in ($dirs + @("scripts/lib"))) {
+        if (Test-Path $dir) {
+            $actual += @(Get-ChildItem -Path $dir -Force -ErrorAction SilentlyContinue |
+                Where-Object { $_.LinkType }).Count
+        }
+    }
+
+    Write-Host "Manifest entries: $expected, actual links: $actual"
+    Write-Host "All links resolve correctly." -ForegroundColor Green
+    exit 0
+}
+
+Write-Host "=== ECC-RSK Installation ===" -ForegroundColor Cyan
+Write-Host ""
+
+# Check submodule
+if (-not (Test-Path "ecc")) {
+    Write-Host "Initializing ECC submodule..." -ForegroundColor Yellow
+    git submodule init
+    git submodule update
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Error: Failed to initialize ECC submodule." -ForegroundColor Red
+        exit 1
+    }
+}
+
+# Create directory structure
+if (-not $SymlinksOnly) {
+    Write-Host "Creating directory structure..."
+    $dirsToCreate = @(
+        "agents", "skills", "commands", "rules", "hooks", "contexts", "schemas",
+        "scripts", "mcp-configs", "templates", "docs",
+        ".claude/rules", ".cursor/rules", ".github/workflows",
+        "rules/nextjs", "rules/supabase", "rules/vercel",
+        "skills/supabase-patterns", "skills/nextjs-app-router",
+        "skills/vercel-deployment", "skills/fullstack-auth",
+        "skills/realtime-sync", "skills/type-safe-stack", "skills/form-patterns"
+    )
+    foreach ($dir in $dirsToCreate) {
+        if (-not (Test-Path $dir)) {
+            New-Item -ItemType Directory -Path $dir -Force | Out-Null
+        }
+    }
+}
+
+Write-Host "Creating links from $Manifest..." -ForegroundColor Cyan
+Write-Host ""
+
+$created = 0
+$failed  = 0
+
+function New-Link {
+    param(
+        [string]$Category,   # agents, skills, commands, rules
+        [string]$EccDir,     # ../ecc/agents, ../ecc/skills, etc.
+        [string]$Name        # planner.md, api-design, etc.
+    )
+
+    $eccSource  = Join-Path "ecc" ($EccDir -replace '^\.\.\\?/?ecc\\?/?', '')
+    $sourcePath = Join-Path $eccSource $Name
+    $linkPath   = Join-Path $Category $Name
+
+    if (Test-Path $sourcePath) {
+        if ($UseCopy) {
+            if (Test-Path $linkPath) { Remove-Item $linkPath -Force -Recurse }
+            if ((Get-Item $sourcePath).PSIsContainer) {
+                Copy-Item -Path $sourcePath -Destination $linkPath -Recurse -Force
+            } else {
+                Copy-Item -Path $sourcePath -Destination $linkPath -Force
+            }
+        } else {
+            # Try symlink (requires DevMode or admin)
+            try {
+                if (Test-Path $linkPath) { Remove-Item $linkPath -Force -Recurse }
+                if ((Get-Item $sourcePath).PSIsContainer) {
+                    New-Item -ItemType Junction -Path $linkPath -Target (Resolve-Path $sourcePath) -Force | Out-Null
+                } else {
+                    New-Item -ItemType SymbolicLink -Path $linkPath -Target (Resolve-Path $sourcePath) -Force | Out-Null
+                }
+            } catch {
+                Write-Host "  Symlink failed for $linkPath — falling back to copy." -ForegroundColor Yellow
+                if (Test-Path $linkPath) { Remove-Item $linkPath -Force -Recurse -ErrorAction SilentlyContinue }
+                if ((Get-Item $sourcePath).PSIsContainer) {
+                    Copy-Item -Path $sourcePath -Destination $linkPath -Recurse -Force
+                } else {
+                    Copy-Item -Path $sourcePath -Destination $linkPath -Force
+                }
+            }
+        }
+        $script:created++
+    } else {
+        Write-Host "  WARNING: source not found: $sourcePath -> skipping $linkPath" -ForegroundColor Yellow
+        $script:failed++
+    }
+}
+
+# --- Agents ---
+foreach ($agent in $manifest.agents) {
+    New-Link -Category "agents" -EccDir "../ecc/agents" -Name $agent
+}
+
+# --- Skills (directories) ---
+foreach ($skill in $manifest.skills) {
+    New-Link -Category "skills" -EccDir "../ecc/skills" -Name $skill
+}
+
+# --- Commands ---
+foreach ($cmd in $manifest.commands) {
+    New-Link -Category "commands" -EccDir "../ecc/commands" -Name $cmd
+}
+
+# --- Rules (directories) ---
+foreach ($rule in $manifest.rules) {
+    New-Link -Category "rules" -EccDir "../ecc/rules" -Name $rule
+}
+
+# --- Misc files ---
+foreach ($item in $manifest.misc_files) {
+    $sourcePath = $item.target
+    $linkPath   = $item.link
+
+    if (Test-Path $sourcePath) {
+        if ($UseCopy) {
+            if (Test-Path $linkPath) { Remove-Item $linkPath -Force }
+            Copy-Item -Path $sourcePath -Destination $linkPath -Force
+        } else {
+            try {
+                if (Test-Path $linkPath) { Remove-Item $linkPath -Force }
+                New-Item -ItemType SymbolicLink -Path $linkPath -Target (Resolve-Path $sourcePath) -Force | Out-Null
+            } catch {
+                Write-Host "  Symlink failed for $linkPath — falling back to copy." -ForegroundColor Yellow
+                Copy-Item -Path $sourcePath -Destination $linkPath -Force
+            }
+        }
+        $created++
+    } else {
+        Write-Host "  WARNING: source not found: $sourcePath -> skipping $linkPath" -ForegroundColor Yellow
+        $failed++
+    }
+}
+
+# --- Misc dirs ---
+foreach ($item in $manifest.misc_dirs) {
+    $sourcePath = $item.target
+    $linkPath   = $item.link
+
+    if (Test-Path $sourcePath) {
+        if ($UseCopy) {
+            if (Test-Path $linkPath) { Remove-Item $linkPath -Force -Recurse }
+            Copy-Item -Path $sourcePath -Destination $linkPath -Recurse -Force
+        } else {
+            try {
+                if (Test-Path $linkPath) { Remove-Item $linkPath -Force -Recurse }
+                New-Item -ItemType Junction -Path $linkPath -Target (Resolve-Path $sourcePath) -Force | Out-Null
+            } catch {
+                Write-Host "  Symlink failed for $linkPath — falling back to copy." -ForegroundColor Yellow
+                Copy-Item -Path $sourcePath -Destination $linkPath -Recurse -Force
+            }
+        }
+        $created++
+    } else {
+        Write-Host "  WARNING: source not found: $sourcePath -> skipping $linkPath" -ForegroundColor Yellow
+        $failed++
+    }
+}
+
+Write-Host ""
+$modeLabel = if ($UseCopy) { "copies" } else { "symlinks" }
+Write-Host "Links ($modeLabel): $created created, $failed skipped (source not found)" -ForegroundColor $(if ($failed -gt 0) { "Yellow" } else { "Green" })
+Write-Host ""
+
+if ($failed -gt 0) {
+    Write-Host "WARNING: $failed link(s) were skipped because ECC source files were not found." -ForegroundColor Yellow
+    Write-Host "This may happen if ECC submodule is not fully initialized."
+    Write-Host "Run: git submodule update --init --recursive"
+    Write-Host ""
+}
+
+Write-Host "✓ Installation complete." -ForegroundColor Green
+Write-Host ""
+Write-Host "Next steps:"
+Write-Host "  1. Verify: .\install.ps1 -Verify"
+if ($UseCopy) {
+    Write-Host "  2. After ECC updates: git submodule update --remote ecc; .\install.ps1 -UseCopy"
+} else {
+    Write-Host "  2. Commit any new links: git add agents/ skills/ commands/ rules/"
+}
 # ECC-RSK Installation Script for Windows
 # Requires PowerShell 5.1+ or PowerShell Core 7+
 

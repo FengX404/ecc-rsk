@@ -19,7 +19,7 @@
 - [3. 从 ECC 筛选的子集](#3-从-ecc-筛选的子集)
   - [3.1 Agents（17 个）](#31-agents17-个)
   - [3.2 Skills（14 个）](#32-skills14-个)
-  - [3.3 Commands（约 40 个）](#33-commands约-40-个)
+  - [3.3 Commands（34 个，从 ECC ~50 个中裁剪）](#33-commands34-个从-ecc-50-个中裁剪)
   - [3.4 Rules（5 套）](#34-rules5-套)
   - [3.5 其他复用项](#35-其他复用项)
 - [4. 新增内容（专项扩展）](#4-新增内容专项扩展)
@@ -172,7 +172,9 @@ ECC-RSK 的所有 agents/skills/commands/rules 基于以下技术栈约定编写
 | `config-gc` | `skills/config-gc/` | 配置垃圾回收 |
 | `agent-sort` | `skills/agent-sort/` | Agent 治理与排序 |
 
-### 3.3 Commands（约 40 个）
+### 3.3 Commands（34 个，从 ECC ~50 个中裁剪）
+
+> 以下内容从 ECC 仓库直接复用，保持文件内容与格式不变。未纳入的 ECC commands 见 [symlink-manifest.json](../symlink-manifest.json) 的 `_excluded_commands` 字段。
 
 #### 全栈开发核心（13 个）
 
@@ -1354,7 +1356,7 @@ ln -sf ../ecc/skills/blueprint skills/blueprint
 # Commands symlink
 ln -sf ../ecc/commands/plan.md commands/plan.md
 ln -sf ../ecc/commands/plan-prd.md commands/plan-prd.md
-# ...（共 ~40 个）
+# ...（共 34 个）
 
 # Rules symlink（目录）
 ln -sf ../ecc/rules/common rules/common
@@ -1446,7 +1448,7 @@ ln -sf ../ecc/skills/benchmark skills/benchmark
 ln -sf ../ecc/skills/config-gc skills/config-gc
 ln -sf ../ecc/skills/agent-sort skills/agent-sort
 
-# Commands symlink（~40 个）
+# Commands symlink（34 个）
 ln -sf ../ecc/commands/plan.md commands/plan.md
 ln -sf ../ecc/commands/plan-prd.md commands/plan-prd.md
 ln -sf ../ecc/commands/feature-dev.md commands/feature-dev.md
@@ -1984,7 +1986,7 @@ diff -r ecc/.claude/rules .claude/rules
 |---|---|---|---|
 | Agents | 17 | 5 | 22 |
 | Skills | 14 | 7 | 21 |
-| Commands | ~40 | 6 | ~46 |
+| Commands | 34 | 6 | 40 |
 | Rules | 5 套 | 3 套 | 8 套 |
 | **总计** | **~76** | **~21** | **~97** |
 

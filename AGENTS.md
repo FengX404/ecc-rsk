@@ -96,32 +96,25 @@ ECC-RSK 提供 22 个 specialized agents，其中 17 个复用 ECC（通过 syml
 
 ---
 
-## 不适用命令（RSK 技术栈外）
+## 不适用的 ECC 命令
 
-ECC 继承的以下命令面向非 RSK 技术栈，在 ECC-RSK 项目中**不应使用**：
+ECC 中有部分命令面向非 RSK 技术栈（Go、Rust、Kotlin、C++、Flutter、Python、Vue 等），这些命令**未引入 ECC-RSK**，不会出现在 `commands/` 目录中。
 
-### 非 React/Next.js 技术栈
+ECC 的以下 ECC 内部系统命令也已排除（未 symlink）：
 
-- `/go-build` `/go-review` `/go-test` — Go
-- `/rust-build` `/rust-review` `/rust-test` — Rust
-- `/kotlin-build` `/kotlin-review` `/kotlin-test` — Kotlin
-- `/cpp-build` `/cpp-review` `/cpp-test` — C++
-- `/flutter-build` `/flutter-test` — Flutter
-- `/python-review` — Python
-- `/vue-review` — Vue（RSK 聚焦 React）
-- `/gradle-build` — Gradle（Java/Kotlin）
+- `multi-backend` `multi-frontend` — 多后端/多前端编排（RSK 后端固定 Supabase、前端固定 Next.js）
+- `hookify` `hookify-help` `hookify-list` — ECC hooks 管理系统
+- `sessions` `save-session` `resume-session` — ECC 会话持久化
+- `project-init` `projects` `promote` `prune` `evolve` — ECC instincts 系统
+- `skill-create` `skill-health` — ECC Skill Creator App
+- `harness-audit` `quality-gate` `model-route` `cost-report` `setup-pm` — ECC 内部工具
 
-### 不适用场景
-
-- `/multi-backend` — 多后端编排（RSK 后端固定为 Supabase）
-- `/multi-frontend` — 多前端编排（RSK 前端固定为 Next.js）
-
-### 推荐替代
+如遇上述场景，RSK 推荐替代：
 
 | 场景 | 不适用命令 | RSK 推荐命令 |
 |---|---|---|
 | 代码审查 | `/python-review` `/go-review` | `/code-review` `/nextjs-review` `/supabase-review` |
-| 构建修复 | `/go-build` `/rust-build` | `/build-fix` |
+| 构建修复 | `/go-build` `/rust-build` | `/build-fix` `/react-build` |
 | 测试 | `/go-test` `/rust-test` | `/react-test` `/test-coverage` |
 
 ---

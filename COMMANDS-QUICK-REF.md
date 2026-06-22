@@ -1,6 +1,6 @@
 # ECC-RSK Commands Quick Reference
 
-> ECC-RSK 可用命令索引。继承 ECC 50+ 命令 + RSK 专项 6 命令。按场景查找，不要全记。
+> ECC-RSK 可用命令索引。继承 ECC 34 命令 + RSK 专项 6 命令。按场景查找，不要全记。
 
 ---
 
@@ -12,8 +12,6 @@
 | `/feature-dev` | 功能开发流程（plan → tdd → review） |
 | `/code-review` | 通用代码质量审查 |
 | `/build-fix` | 检测并修复构建错误 |
-| `/quality-gate` | 质量门检查 |
-| `/project-init` | 项目初始化 |
 
 ---
 
@@ -67,8 +65,6 @@
 | Command | 用途 |
 |---|---|
 | `/checkpoint` | 创建检查点 |
-| `/save-session` | 保存会话 |
-| `/sessions` | 会话列表 |
 | `/aside` | 旁路任务 |
 | `/learn` | 从会话提取模式 |
 
@@ -78,10 +74,7 @@
 
 | Command | 用途 |
 |---|---|
-| `/skill-create` | 创建新 skill |
-| `/skill-health` | skill 健康检查 |
 | `/update-docs` | 更新文档 |
-| `/prune` | 清理无用内容 |
 
 ---
 
@@ -92,8 +85,6 @@
 | `/pr` | 创建 PR |
 | `/review-pr` | 审查 PR |
 | `/plan-prd` | 规划 PRD |
-| `/model-route` | 模型路由 |
-| `/cost-report` | 成本报告 |
 
 ---
 
@@ -105,26 +96,17 @@
 | `/epic-claim` `/epic-review` `/epic-validate` | Epic 管理 |
 | `/multi-plan` `/multi-execute` | 多任务编排 |
 
-> 详细用法见 ECC 文档。RSK 场景下 `/multi-backend` `/multi-frontend` 不适用（技术栈固定）。
+> 详细用法见 ECC 文档。
 
 ---
 
-## 不适用命令（RSK 技术栈外）
+## 不适用命令
 
-以下命令面向非 React/Next.js 技术栈，**不应在 RSK 项目中使用**：
+以下非 RSK 技术栈命令**未引入 ECC-RSK**，不会出现在命令列表中：
 
-| 命令 | 技术栈 | RSK 替代 |
-|---|---|---|
-| `/go-build` `/go-review` `/go-test` | Go | `/build-fix` `/code-review` |
-| `/rust-build` `/rust-review` `/rust-test` | Rust | `/build-fix` `/code-review` |
-| `/kotlin-build` `/kotlin-review` `/kotlin-test` | Kotlin | `/build-fix` `/code-review` |
-| `/cpp-build` `/cpp-review` `/cpp-test` | C++ | `/build-fix` `/code-review` |
-| `/flutter-build` `/flutter-test` | Flutter | — |
-| `/python-review` | Python | `/code-review` |
-| `/vue-review` | Vue | `/react-review` |
-| `/gradle-build` | Gradle | — |
-| `/multi-backend` | 多后端 | — |
-| `/multi-frontend` | 多前端 | — |
+| 技术栈 | RSK 替代 |
+|---|---|
+| Go / Rust / Kotlin / C++ / Flutter / Python / Vue / Gradle | `/build-fix` `/code-review` `/react-review` |
 
 ---
 
@@ -157,4 +139,4 @@
 
 - [AGENTS.md](AGENTS.md) — Agent 索引与编排规则
 - [CLAUDE.md](CLAUDE.md) — Claude Code 指南
-- [ecc/COMMANDS-QUICK-REF.md](ecc/COMMANDS-QUICK-REF.md) — ECC 完整命令索引（59 个）
+- [ecc/COMMANDS-QUICK-REF.md](ecc/COMMANDS-QUICK-REF.md) — ECC 完整命令索引

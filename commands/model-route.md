@@ -1,1 +1,0 @@
-../ecc/commands/model-route.md

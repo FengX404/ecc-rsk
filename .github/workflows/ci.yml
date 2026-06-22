@@ -110,7 +110,7 @@ jobs:
           for f in patterns hooks security testing; do
             test -f "rules/supabase/${f}.md" || { echo "❌ Missing rules/supabase/${f}.md"; exit 1; }
           done
-          for f in patterns hooks security performance; do
+          for f in patterns hooks security testing performance; do
             test -f "rules/vercel/${f}.md" || { echo "❌ Missing rules/vercel/${f}.md"; exit 1; }
           done
           echo "✓ All new rules present"
