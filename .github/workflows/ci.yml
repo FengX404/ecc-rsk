@@ -1,0 +1,160 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'assets/**'
+      - '*.md'
+      - 'README.*'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'assets/**'
+      - '*.md'
+      - 'README.*'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  symlinks:
+    name: Check Symlinks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Verify symlinks resolve
+        run: |
+          echo "Checking for broken symlinks..."
+          broken=$(find . -type l -xtype l -not -path "./ecc/*" -print)
+          if [ -n "$broken" ]; then
+            echo "❌ Broken symlinks found:"
+            echo "$broken"
+            exit 1
+          fi
+          echo "✓ All symlinks resolve correctly"
+
+      - name: Verify manifest consistency
+        run: |
+          python3 -c "
+          import json, os
+
+          with open('symlink-manifest.json') as f:
+              m = json.load(f)
+
+          # Count manifest entries
+          expected  = len(m.get('agents', []))
+          expected += len(m.get('skills', []))
+          expected += len(m.get('commands', []))
+          expected += len(m.get('rules', []))
+          expected += len(m.get('misc_files', []))
+          expected += len(m.get('misc_dirs', []))
+          print(f'Manifest entries: {expected}')
+
+          # Count actual symlinks that point into ecc/
+          import subprocess
+          result = subprocess.run(['find', 'agents', 'skills', 'commands', 'rules', 'hooks', 'contexts', 'schemas', 'scripts/lib', '-type', 'l'], capture_output=True, text=True)
+          actual = len([l for l in result.stdout.strip().split(chr(10)) if l])
+          print(f'Actual symlinks:  {actual}')
+
+          if expected != actual:
+              print(f'MISMATCH: manifest={expected} vs actual={actual}')
+              exit(1)
+          print('✓ Manifest and symlinks are consistent')
+          "
+
+  structure:
+    name: Check Structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Verify new agents
+        run: |
+          for agent in typescript-reviewer supabase-reviewer nextjs-reviewer vercel-deployer fullstack-architect; do
+            test -f "agents/${agent}.md" || { echo "❌ Missing agents/${agent}.md"; exit 1; }
+          done
+          echo "✓ All 5 new agents present"
+
+      - name: Verify new skills
+        run: |
+          for skill in supabase-patterns nextjs-app-router vercel-deployment fullstack-auth realtime-sync type-safe-stack form-patterns; do
+            test -f "skills/${skill}/SKILL.md" || { echo "❌ Missing skills/${skill}/SKILL.md"; exit 1; }
+          done
+          echo "✓ All 7 new skills present"
+
+      - name: Verify new commands
+        run: |
+          for cmd in supabase-review supabase-migrate nextjs-review vercel-deploy fullstack-init typecheck-e2e; do
+            test -f "commands/${cmd}.md" || { echo "❌ Missing commands/${cmd}.md"; exit 1; }
+          done
+          echo "✓ All 6 new commands present"
+
+      - name: Verify new rules
+        run: |
+          for f in patterns hooks security testing performance; do
+            test -f "rules/nextjs/${f}.md" || { echo "❌ Missing rules/nextjs/${f}.md"; exit 1; }
+          done
+          for f in patterns hooks security testing; do
+            test -f "rules/supabase/${f}.md" || { echo "❌ Missing rules/supabase/${f}.md"; exit 1; }
+          done
+          for f in patterns hooks security performance; do
+            test -f "rules/vercel/${f}.md" || { echo "❌ Missing rules/vercel/${f}.md"; exit 1; }
+          done
+          echo "✓ All new rules present"
+
+      - name: Verify core docs
+        run: |
+          for doc in README.md AGENTS.md CLAUDE.md SKILL.md SKILL-ROUTES.md CONTRIBUTING.md; do
+            test -f "$doc" || { echo "❌ Missing $doc"; exit 1; }
+          done
+          echo "✓ All core docs present"
+
+  docs:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check markdown frontmatter
+        run: |
+          for agent in typescript-reviewer supabase-reviewer nextjs-reviewer vercel-deployer fullstack-architect; do
+            head -1 "agents/${agent}.md" | grep -q "^---" || { echo "❌ agents/${agent}.md missing frontmatter"; exit 1; }
+          done
+
+          for cmd in supabase-review supabase-migrate nextjs-review vercel-deploy fullstack-init typecheck-e2e; do
+            head -1 "commands/${cmd}.md" | grep -q "^---" || { echo "❌ commands/${cmd}.md missing frontmatter"; exit 1; }
+          done
+          echo "✓ All frontmatter present"
+
+      - name: Check internal links
+        run: |
+          grep -oE '\]\([^)]+\.md[^)]*\)' README.md | sed 's/\](//;s/)//' | while read link; do
+            case "$link" in
+              http*|/*) continue ;;
+            esac
+            if [ ! -e "$link" ]; then
+              echo "⚠️ Broken link in README.md: $link"
+            fi
+          done
+          echo "✓ Link check complete"

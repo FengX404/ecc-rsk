@@ -1,0 +1,104 @@
+name: Sync ECC Submodule
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # 每周日 00:00 UTC
+  workflow_dispatch:      # 手动触发
+
+concurrency:
+  group: sync-ecc
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Update ECC submodule
+        timeout-minutes: 3
+        run: |
+          git submodule update --remote ecc
+          cd ecc
+          ECC_VERSION=$(git describe --tags --always 2>/dev/null || git rev-parse --short HEAD)
+          cd ..
+          echo "ECC_VERSION=$ECC_VERSION" >> $GITHUB_ENV
+
+      - name: Check for changes
+        run: |
+          if git diff --quiet ecc; then
+            echo "No changes in ECC submodule"
+            exit 0
+          fi
+          echo "Changes detected in ECC submodule"
+
+      - name: Detect new ECC files not in manifest
+        run: |
+          python3 -c "
+          import json, os
+
+          with open('symlink-manifest.json') as f:
+              m = json.load(f)
+
+          existing_agents = set(m.get('agents', []))
+          existing_skills = set(m.get('skills', []))
+          existing_commands = set(m.get('commands', []))
+
+          ecc_agents = set(f for f in os.listdir('ecc/agents') if f.endswith('.md'))
+          ecc_skills = set(d for d in os.listdir('ecc/skills') if os.path.isdir(os.path.join('ecc/skills', d)) and not d.startswith('.'))
+          ecc_commands = set(f for f in os.listdir('ecc/commands') if f.endswith('.md'))
+
+          new_agents = sorted(ecc_agents - existing_agents)
+          new_skills = sorted(ecc_skills - existing_skills)
+          new_commands = sorted(ecc_commands - existing_commands)
+
+          if new_agents:
+              print(f'NEW agents in ECC (not in RSK manifest): {new_agents}')
+          if new_skills:
+              print(f'NEW skills in ECC (not in RSK manifest): {new_skills}')
+          if new_commands:
+              print(f'NEW commands in ECC (not in RSK manifest): {new_commands}')
+
+          if new_agents or new_skills or new_commands:
+              print()
+              print('These files are available in ECC but not included in symlink-manifest.json.')
+              print('Review and add to manifest if they are relevant for the RSK stack.')
+          else:
+              print('No new ECC files detected — manifest is up to date.')
+          "
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "sync: update ECC submodule to ${{ env.ECC_VERSION }}"
+          body: |
+            Automated sync of ECC submodule.
+
+            ECC version: `${{ env.ECC_VERSION }}`
+
+            ### Post-merge checklist
+            - [ ] Review ECC changelog for breaking changes
+            - [ ] Run `./install.sh` to refresh symlinks
+            - [ ] Run `./install.sh --verify` to check symlink integrity
+            - [ ] Review any new ECC files detected in the CI logs above
+          branch: "sync/ecc-${{ env.ECC_VERSION }}"
+          commit-message: "sync: update ECC submodule to ${{ env.ECC_VERSION }}"
+          delete-branch: true
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { GITHUB_REPOSITORY, GITHUB_RUN_ID } = process.env;
+            const [owner, repo] = GITHUB_REPOSITORY.split('/');
+            await github.rest.issues.create({
+              owner,
+              repo,
+              title: '⚠️ ECC submodule sync failed',
+              body: `The automated ECC submodule sync workflow failed.\n\n[View run](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})\n\nPossible causes:\n- ECC upstream repository is unreachable\n- Network timeout during submodule update\n- Manifest/symlink creation failure`,
+              labels: ['sync', 'ci']
+            });

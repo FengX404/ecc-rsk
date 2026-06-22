@@ -1,0 +1,332 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+  "small_model": "anthropic/claude-haiku-4-5",
+  "default_agent": "build",
+  "instructions": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "CONTRIBUTING.md",
+    "skills/supabase-patterns/SKILL.md",
+    "skills/nextjs-app-router/SKILL.md",
+    "skills/vercel-deployment/SKILL.md",
+    "skills/fullstack-auth/SKILL.md",
+    "skills/realtime-sync/SKILL.md",
+    "skills/type-safe-stack/SKILL.md",
+    "skills/form-patterns/SKILL.md",
+    "skills/api-design/SKILL.md",
+    "skills/tdd-workflow/SKILL.md",
+    "skills/security-review/SKILL.md",
+    "skills/e2e-testing/SKILL.md",
+    "skills/verification-loop/SKILL.md"
+  ],
+  "plugin": [
+    "./plugins"
+  ],
+  "skills": {
+    "paths": [
+      "../skills"
+    ]
+  },
+  "agent": {
+    "build": {
+      "description": "Primary coding agent for full-stack development with Next.js + Supabase",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-5",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "read": true,
+        "changed-files": true
+      }
+    },
+    "planner": {
+      "description": "Implementation planning for complex features and refactoring",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/planner.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "architect": {
+      "description": "System design and scalability for full-stack architecture",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/architect.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "code-reviewer": {
+      "description": "General code review for quality, security, and maintainability",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/code-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "react-reviewer": {
+      "description": "React/JSX specialist reviewing hooks, components, and patterns",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/react-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "typescript-reviewer": {
+      "description": "TypeScript specialist reviewing for `any` abuse, async correctness, and strict mode compliance",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/typescript-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "supabase-reviewer": {
+      "description": "Supabase specialist reviewing RLS, SQL injection, Auth, and Edge Functions",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/supabase-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "nextjs-reviewer": {
+      "description": "Next.js App Router specialist reviewing RSC boundaries, Server Actions, and caching",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/nextjs-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "security-reviewer": {
+      "description": "Security vulnerability detection and remediation specialist",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/security-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": true,
+        "edit": true
+      }
+    },
+    "tdd-guide": {
+      "description": "Test-Driven Development specialist enforcing write-tests-first methodology with 80%+ coverage",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/tdd-guide.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "build-error-resolver": {
+      "description": "Build and TypeScript error resolution specialist",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/build-error-resolver.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "e2e-runner": {
+      "description": "End-to-end testing specialist using Playwright for critical user flows",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/e2e-runner.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "doc-updater": {
+      "description": "Documentation and codemap specialist",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/doc-updater.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "refactor-cleaner": {
+      "description": "Dead code cleanup and consolidation specialist",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/refactor-cleaner.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "docs-lookup": {
+      "description": "Documentation specialist using Context7 MCP to fetch current library and API documentation",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-5",
+      "prompt": "{file:prompts/agents/docs-lookup.txt}",
+      "tools": {
+        "read": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "database-reviewer": {
+      "description": "PostgreSQL/Supabase database specialist for query optimization, schema design, and RLS",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-5",
+      "prompt": "{file:prompts/agents/database-reviewer.txt}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  },
+  "command": {
+    "plan": {
+      "description": "Create a detailed implementation plan for complex features",
+      "template": "{file:commands/plan.md}\n\n$ARGUMENTS",
+      "agent": "planner",
+      "subtask": true
+    },
+    "tdd": {
+      "description": "Enforce TDD workflow with 80%+ test coverage",
+      "template": "{file:commands/tdd.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "code-review": {
+      "description": "Review code for quality, security, and maintainability",
+      "template": "{file:commands/code-review.md}\n\n$ARGUMENTS",
+      "agent": "code-reviewer",
+      "subtask": true
+    },
+    "react-review": {
+      "description": "Review React/JSX code for hooks, components, and patterns",
+      "template": "{file:commands/react-review.md}\n\n$ARGUMENTS",
+      "agent": "react-reviewer",
+      "subtask": true
+    },
+    "typescript-review": {
+      "description": "Review TypeScript code for `any` abuse and strict mode compliance",
+      "template": "{file:commands/typescript-review.md}\n\n$ARGUMENTS",
+      "agent": "typescript-reviewer",
+      "subtask": true
+    },
+    "supabase-review": {
+      "description": "Review Supabase code for RLS, SQL injection, and Auth",
+      "template": "{file:commands/supabase-review.md}\n\n$ARGUMENTS",
+      "agent": "supabase-reviewer",
+      "subtask": true
+    },
+    "nextjs-review": {
+      "description": "Review Next.js App Router code for RSC boundaries and Server Actions",
+      "template": "{file:commands/nextjs-review.md}\n\n$ARGUMENTS",
+      "agent": "nextjs-reviewer",
+      "subtask": true
+    },
+    "security": {
+      "description": "Run comprehensive security review",
+      "template": "{file:commands/security.md}\n\n$ARGUMENTS",
+      "agent": "security-reviewer",
+      "subtask": true
+    },
+    "build-fix": {
+      "description": "Fix build and TypeScript errors with minimal changes",
+      "template": "{file:commands/build-fix.md}\n\n$ARGUMENTS",
+      "agent": "build-error-resolver",
+      "subtask": true
+    },
+    "e2e": {
+      "description": "Generate and run E2E tests with Playwright",
+      "template": "{file:commands/e2e.md}\n\n$ARGUMENTS",
+      "agent": "e2e-runner",
+      "subtask": true
+    },
+    "refactor-clean": {
+      "description": "Remove dead code and consolidate duplicates",
+      "template": "{file:commands/refactor-clean.md}\n\n$ARGUMENTS",
+      "agent": "refactor-cleaner",
+      "subtask": true
+    },
+    "update-docs": {
+      "description": "Update documentation",
+      "template": "{file:commands/update-docs.md}\n\n$ARGUMENTS",
+      "agent": "doc-updater",
+      "subtask": true
+    },
+    "test-coverage": {
+      "description": "Analyze test coverage",
+      "template": "{file:commands/test-coverage.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subtask": true
+    },
+    "supabase-migrate": {
+      "description": "Database migration workflow",
+      "template": "{file:commands/supabase-migrate.md}\n\n$ARGUMENTS"
+    },
+    "vercel-deploy": {
+      "description": "Vercel deployment workflow",
+      "template": "{file:commands/vercel-deploy.md}\n\n$ARGUMENTS"
+    },
+    "fullstack-init": {
+      "description": "Initialize full-stack project with Next.js + Supabase",
+      "template": "{file:commands/fullstack-init.md}\n\n$ARGUMENTS"
+    },
+    "typecheck-e2e": {
+      "description": "End-to-end type safety check",
+      "template": "{file:commands/typecheck-e2e.md}\n\n$ARGUMENTS"
+    },
+    "learn": {
+      "description": "Extract patterns and learnings from session",
+      "template": "{file:commands/learn.md}\n\n$ARGUMENTS"
+    },
+    "skill-create": {
+      "description": "Generate skills from git history",
+      "template": "{file:commands/skill-create.md}\n\n$ARGUMENTS"
+    }
+  },
+  "permission": {
+    "mcp_*": "ask"
+  }
+}

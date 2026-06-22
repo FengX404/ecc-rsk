@@ -1,0 +1,79 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+# ECC-RSK — Codex Reference Configuration
+#
+# Copy this file to ~/.codex/config.toml for global defaults, or keep it in
+# the project root as .codex/config.toml for project-local settings.
+
+# Top-level runtime settings
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "live"
+
+# Persistent instructions
+persistent_instructions = "Follow project AGENTS.md guidelines. Use available MCP servers when they can help. All Supabase tables must have RLS enabled. Server Actions must validate input with Zod and check authorization."
+
+# MCP servers
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+startup_timeout_sec = 30
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp@latest"]
+startup_timeout_sec = 30
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest", "--extension"]
+startup_timeout_sec = 30
+
+[mcp_servers.memory]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-memory"]
+startup_timeout_sec = 30
+
+# Supabase MCP (optional, uncomment when needed)
+# [mcp_servers.supabase]
+# command = "npx"
+# args = ["-y", "supabase-mcp-server@latest", "--read-only"]
+
+[features]
+multi_agent = true
+
+# Profiles
+[profiles.strict]
+approval_policy = "on-request"
+sandbox_mode = "read-only"
+web_search = "cached"
+
+[profiles.yolo]
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+web_search = "live"
+
+# Multi-agent roles
+[agents]
+max_threads = 6
+max_depth = 1
+
+[agents.explorer]
+description = "Read-only codebase explorer for gathering evidence before changes are proposed."
+config_file = "agents/explorer.toml"
+
+[agents.reviewer]
+description = "PR reviewer focused on correctness, security, and missing tests."
+config_file = "agents/reviewer.toml"
+
+[agents.typescript_reviewer]
+description = "TypeScript specialist reviewing for `any` abuse, async correctness, and strict mode compliance."
+config_file = "agents/typescript-reviewer.toml"
+
+[agents.supabase_reviewer]
+description = "Supabase specialist reviewing RLS, SQL injection, Auth, and Edge Functions."
+config_file = "agents/supabase-reviewer.toml"
+
+[agents.nextjs_reviewer]
+description = "Next.js App Router specialist reviewing RSC boundaries, Server Actions, and caching."
+config_file = "agents/nextjs-reviewer.toml"

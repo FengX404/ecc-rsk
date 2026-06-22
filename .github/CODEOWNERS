@@ -1,0 +1,37 @@
+# ECC-RSK Code Owners
+
+# 新增内容
+agents/typescript-reviewer.md @FengX
+agents/supabase-reviewer.md @FengX
+agents/nextjs-reviewer.md @FengX
+agents/vercel-deployer.md @FengX
+agents/fullstack-architect.md @FengX
+
+skills/supabase-patterns/ @FengX
+skills/nextjs-app-router/ @FengX
+skills/vercel-deployment/ @FengX
+skills/fullstack-auth/ @FengX
+skills/realtime-sync/ @FengX
+skills/type-safe-stack/ @FengX
+skills/form-patterns/ @FengX
+
+commands/supabase-review.md @FengX
+commands/supabase-migrate.md @FengX
+commands/nextjs-review.md @FengX
+commands/vercel-deploy.md @FengX
+commands/fullstack-init.md @FengX
+commands/typecheck-e2e.md @FengX
+
+rules/nextjs/ @FengX
+rules/supabase/ @FengX
+rules/vercel/ @FengX
+
+templates/ @FengX
+docs/ @FengX
+
+# 核心文档
+README.md @FengX
+AGENTS.md @FengX
+CLAUDE.md @FengX
+CONTRIBUTING.md @FengX
+VERSION @FengX

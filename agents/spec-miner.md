@@ -1,0 +1,1 @@
+../ecc/agents/spec-miner.md

@@ -1,0 +1,1 @@
+../ecc/commands/setup-pm.md

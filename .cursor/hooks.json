@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-hooks.json",
+  "version": "1.0",
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": "Edit|Write",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node -e \"const p=process.env.FILE_PATH||''; if(p.match(/\\.(tsx|jsx|ts|js)$/)){console.log('lint check triggered')}\""
+        }
+      ]
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "Edit|Write",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node -e \"const p=process.env.FILE_PATH||''; if(p.match(/\\.(tsx|jsx)$/)){console.log('React file modified - consider /react-review')}\""
+        }
+      ]
+    },
+    {
+      "event": "UserPromptSubmit",
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo 'prompt submitted'"
+        }
+      ]
+    }
+  ]
+}

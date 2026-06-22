@@ -1,0 +1,1 @@
+../ecc/commands/security-scan.md

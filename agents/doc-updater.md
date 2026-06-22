@@ -1,0 +1,1 @@
+../ecc/agents/doc-updater.md
