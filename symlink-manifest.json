@@ -110,8 +110,7 @@
     { "target": "../ecc/contexts/research.md", "link": "contexts/research.md" },
     { "target": "../ecc/contexts/review.md", "link": "contexts/review.md" },
     { "target": "../ecc/schemas/hooks.schema.json", "link": "schemas/hooks.schema.json" },
-    { "target": "../ecc/schemas/plugin.schema.json", "link": "schemas/plugin.schema.json" },
-    { "target": "../ecc/LICENSE", "link": "LICENSE" }
+    { "target": "../ecc/schemas/plugin.schema.json", "link": "schemas/plugin.schema.json" }
   ],
 
   "misc_dirs": [
