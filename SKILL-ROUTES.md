@@ -155,6 +155,10 @@ metadata:
 | 环境变量、env vars、NEXT_PUBLIC | `vercel-deployment` |
 | 运行时、runtime、Edge Runtime、Node Runtime | `vercel-deployment` |
 | 性能监控、Analytics、Speed Insights | `vercel-deployment`、`benchmark` |
+| 多账号、账号冲突、Vercel 账号 | `vercel-deployment` |
+| vercel link、token 认证、非浏览器登录 | `vercel-deployment` |
+| commit author、commit email、deployment blocked | `vercel-deployment` |
+| GitHub Actions 部署、绕过 Git 集成 | `vercel-deployment` |
 
 ### 2.6 通用工程意图
 

@@ -97,6 +97,23 @@
 - ❌ 全局 `Cache-Control: no-cache`（性能损失）
 - ❌ 函数 `maxDuration` 设置过高导致成本失控
 
+## 多账号与 Git 集成
+
+### 必须做
+
+- 多 Vercel 账号场景使用 GitHub Actions + Vercel CLI 部署（绕过 Git 集成）
+- `vercel link` 用 `--token` 参数认证，避免浏览器 OAuth 干扰
+- GitHub Secrets 管理 `VERCEL_TOKEN` / `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID`
+- GitHub Actions deploy 前 `rm -rf .git` 绕过 commit author email 校验
+- GitHub PAT 至少包含 `repo` + `workflow`（Classic）或 Actions/Contents/Secrets 读写（Fine-grained）
+
+### 禁止做
+
+- ❌ 同一 GitHub 账号关联多个 Vercel 账号（Vercel 硬限制，会互相覆盖）
+- ❌ 在 workflow 中硬编码 Vercel token
+- ❌ 不断开 Vercel Git 集成就同时跑 GitHub Actions 部署（webhook 冲突）
+- ❌ 期望 `git config user.email` 能改变已有 commit 的 author（只影响新 commit）
+
 ## 相关 Skills
 
 - `vercel-deployment` — 完整代码示例与工作流

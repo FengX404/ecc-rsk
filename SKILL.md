@@ -46,7 +46,7 @@ skills/<name>/SKILL.md（具体 skill 正文）
 |---|---|---|
 | `supabase-patterns` | RLS 策略、Auth 集成、Realtime 订阅、Storage 上传、Edge Functions、类型生成、迁移工作流 | [skills/supabase-patterns/SKILL.md](skills/supabase-patterns/SKILL.md) |
 | `nextjs-app-router` | RSC 边界、Server Actions、Route Handlers、Middleware、缓存策略、Streaming、Metadata | [skills/nextjs-app-router/SKILL.md](skills/nextjs-app-router/SKILL.md) |
-| `vercel-deployment` | 部署模式、环境变量管理、运行时选择、渲染模式决策、`vercel.json` 配置、性能监控 | [skills/vercel-deployment/SKILL.md](skills/vercel-deployment/SKILL.md) |
+| `vercel-deployment` | 部署模式、环境变量管理、运行时选择、渲染模式决策、`vercel.json` 配置、性能监控、多账号部署与 Git 集成冲突 | [skills/vercel-deployment/SKILL.md](skills/vercel-deployment/SKILL.md) |
 | `fullstack-auth` | PKCE 流程、会话管理、授权架构、OAuth 集成、RBAC、多租户认证、安全加固 | [skills/fullstack-auth/SKILL.md](skills/fullstack-auth/SKILL.md) |
 | `realtime-sync` | Realtime 订阅模式、React 集成、乐观更新、冲突解决、性能优化、离线支持 | [skills/realtime-sync/SKILL.md](skills/realtime-sync/SKILL.md) |
 | `type-safe-stack` | 端到端类型安全（PostgreSQL → Supabase 类型 → Zod → Server Action → React） | [skills/type-safe-stack/SKILL.md](skills/type-safe-stack/SKILL.md) |
