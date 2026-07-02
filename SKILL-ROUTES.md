@@ -178,6 +178,18 @@ metadata:
 | ECC 裁剪、install plan、DAILY vs LIBRARY | `agent-sort` |
 | 代码讲解、CodeTour、onboarding tour | `code-tour` |
 
+### 2.7 多角度审查意图
+
+| 关键词 | 激活 Skill |
+|---|---|
+| 多角度审查、multi-angle、全维度审查 | `multi-angle-review` |
+| 功能审查、需求覆盖、竞品对标 | `multi-angle-review`（feature 维度） |
+| 体验审查、交互完整性、加载态/空态/错误态 | `multi-angle-review`（ux 维度） |
+| 质量审查、性能、稳定性、兼容性 | `multi-angle-review`（quality 维度） |
+| 工程审查、可观测性、技术债、CI/CD | `multi-angle-review`（engineering 维度） |
+| 四维迭代、功能/质量/体验/工程 | `multi-angle-review`（全维度） |
+| 审查报告、review report、并行审查 | `multi-angle-review` |
+
 ---
 
 ## 3. 开发阶段路由

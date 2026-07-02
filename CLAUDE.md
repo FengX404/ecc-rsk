@@ -56,13 +56,16 @@ ECC-RSK 所有内容基于以下技术栈：
 - `spec-miner`、`a11y-architect`、`seo-specialist`、`code-simplifier`
 - `comment-analyzer`、`docs-lookup`、`pr-test-analyzer`
 
-### ECC-RSK 新增（5 个）
+### ECC-RSK 新增（8 个）
 
 - `typescript-reviewer` — TypeScript 专项审查
 - `supabase-reviewer` — Supabase 专项审查
 - `nextjs-reviewer` — Next.js App Router 专项审查
 - `vercel-deployer` — Vercel 部署配置
 - `fullstack-architect` — 全栈架构设计
+- `ux-reviewer` — 体验专项审查（交互完整性、视觉一致性、微交互）
+- `feature-reviewer` — 功能完整性审查（需求覆盖、竞品对标、A/B 实验）
+- `observability-reviewer` — 可观测性审查（错误监控、日志链路、告警）
 
 ---
 
@@ -103,7 +106,7 @@ ECC-RSK 提供**薄路由机制**，AI 助手据此自动激活对应 skill：
 - `repo-scan`、`seo`、`taste`、`ui-demo`、`github-ops`
 - `benchmark`、`config-gc`、`agent-sort`、`code-tour`
 
-### ECC-RSK 新增（7 个）
+### ECC-RSK 新增（8 个）
 
 - `supabase-patterns` — RLS、Auth、Realtime、Storage、Edge Functions
 - `nextjs-app-router` — RSC 边界、Server Actions、缓存、Metadata
@@ -112,6 +115,7 @@ ECC-RSK 提供**薄路由机制**，AI 助手据此自动激活对应 skill：
 - `realtime-sync` — Realtime 订阅、乐观更新、冲突解决
 - `type-safe-stack` — 端到端类型安全流
 - `form-patterns` — React Hook Form + Zod + Server Actions
+- `multi-angle-review` — 多角度审查系统（功能/质量/体验/工程四维迭代）
 
 ---
 

@@ -40,7 +40,7 @@ skills/<name>/SKILL.md（具体 skill 正文）
 
 ## Skills 索引
 
-### ECC-RSK 新增（7 个）— 全栈专项
+### ECC-RSK 新增（8 个）— 全栈专项
 
 | Skill | 职责 | 路径 |
 |---|---|---|
@@ -51,6 +51,7 @@ skills/<name>/SKILL.md（具体 skill 正文）
 | `realtime-sync` | Realtime 订阅模式、React 集成、乐观更新、冲突解决、性能优化、离线支持 | [skills/realtime-sync/SKILL.md](skills/realtime-sync/SKILL.md) |
 | `type-safe-stack` | 端到端类型安全（PostgreSQL → Supabase 类型 → Zod → Server Action → React） | [skills/type-safe-stack/SKILL.md](skills/type-safe-stack/SKILL.md) |
 | `form-patterns` | React Hook Form + Zod + Server Actions 表单、多步向导、可访问性、文件上传 | [skills/form-patterns/SKILL.md](skills/form-patterns/SKILL.md) |
+| `multi-angle-review` | 多角度审查系统（功能/质量/体验/工程四维迭代），薄路由 + 子 Agent 并行 + CSV 标准抽样 | [skills/multi-angle-review/SKILL.md](skills/multi-angle-review/SKILL.md) |
 
 ### 从 ECC 复用（14 个）— 通用工程能力
 

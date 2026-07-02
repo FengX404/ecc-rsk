@@ -1,0 +1,26 @@
+category,severity,role_persona,criterion
+技术债,🔴,TypeScript审查专家,是否使用了 any 类型？能否用 unknown 或具体类型替代
+技术债,🔴,TypeScript审查专家,是否有 @ts-ignore / @ts-expect-error？是否有注释说明原因
+技术债,🟡,TypeScript审查专家,tsconfig 是否开启 strict mode？noUncheckedIndexedAccess 是否开启
+技术债,🟡,代码架构师,是否有循环依赖？检查 import 链是否有 A→B→A
+技术债,🟡,代码架构师,是否有超过 300 行的文件？是否需要拆分
+技术债,🟡,代码架构师,是否有未使用的导出？ dead code 是否清理
+技术债,🔵,代码架构师,是否有 TODO/FIXME/HACK 注释？是否登记到 issue tracker
+工具链,🟡,DevOps工程师,Next.js 版本是否为最新稳定版？是否有 breaking change 升级计划
+工具链,🟡,DevOps工程师,依赖是否有重复或冗余？检查 package.json 是否有同类库多个
+工具链,🟡,DevOps工程师,是否锁定了依赖版本？package-lock.json / pnpm-lock.yaml 是否提交
+工具链,🔵,DevOps工程师,是否使用了过时的 API？检查 Next.js deprecated 标记
+自动化,🔴,CI/CD工程师,CI 是否在 PR 时运行？是否阻塞合并不通过的 PR
+自动化,🔴,CI/CD工程师,是否有自动化测试？单元测试 + E2E 测试是否在 CI 中运行
+自动化,🟡,CI/CD工程师,是否有 lint + typecheck 门禁？是否阻塞不通过的代码
+自动化,🟡,CI/CD工程师,测试覆盖率是否 >= 80%？是否有覆盖率报告
+自动化,🟡,CI/CD工程师,是否有自动化部署流程？是否支持预览部署
+自动化,🔵,CI/CD工程师,是否有 commit message 规范检查？commitlint 是否配置
+可观测性,🔴,可观测性工程师,是否有错误监控？Sentry 或类似服务是否集成
+可观测性,🔴,可观测性工程师,Server Action 错误是否被捕获并上报？而非仅 console.error
+可观测性,🟡,可观测性工程师,是否有性能监控？Vercel Analytics 或 Web Vitals 是否集成
+可观测性,🟡,可观测性工程师,关键业务操作是否有日志？日志级别是否合理（info/warn/error）
+可观测性,🟡,可观测性工程师,日志是否包含 trace ID？能否追踪一个请求的完整链路
+可观测性,🟡,可观测性工程师,是否有告警机制？错误率飙升时是否能及时通知
+可观测性,🔵,可观测性工程师,是否有用户行为追踪？关键 funnel 是否有埋点
+可观测性,🟡,可观测性工程师,Supabase 查询慢日志是否检查？是否有 slow query 告警

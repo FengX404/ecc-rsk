@@ -1,0 +1,29 @@
+category,severity,role_persona,criterion
+性能,🔴,性能工程师,Core Web Vitals 是否达标？LCP < 2.5s、INP < 200ms、CLS < 0.1
+性能,🔴,性能工程师,首屏是否使用 Server Component 渲染？避免客户端瀑布请求
+性能,🟡,性能工程师,Bundle size 是否超标？检查 next build 输出的 First Load JS
+性能,🟡,性能工程师,图片是否使用 next/image 优化？是否设置了 width/height 防止 CLS
+性能,🟡,性能工程师,是否使用了 dynamic import 懒加载非首屏组件？
+性能,🟡,性能工程师,Server Component 中是否有阻塞渲染的同步操作？应使用 Streaming/Suspense
+性能,🔵,性能工程师,字体是否使用 next/font 优化？是否设置了 font-display: swap
+性能,🟡,性能工程师,是否使用了 React Suspense 边界进行流式渲染？
+性能,🔴,性能工程师,客户端是否有多余的网络瀑布请求？应用 Server Component 合并请求
+稳定性,🔴,稳定性工程师,是否有全局 Error Boundary（error.tsx）？每个路由段是否都有
+稳定性,🔴,稳定性工程师,Server Action 是否有 try-catch？错误是否向上传播到了全局边界
+稳定性,🟡,稳定性工程师,异步操作是否有超时处理？fetch 是否设置了 AbortController
+稳定性,🟡,稳定性工程师,是否有竞态条件风险？快速切换路由时是否有取消机制
+稳定性,🟡,稳定性工程师,React Strict Mode 下是否有副作用重复执行问题？
+稳定性,🔵,稳定性工程师,是否有内存泄漏风险？useEffect cleanup 是否完整
+安全,🔴,安全工程师,依赖是否有已知漏洞？运行 npm audit 检查
+安全,🔴,安全工程师,用户输入是否经过 Zod 校验后才进入 Server Action？
+安全,🔴,安全工程师,是否有 XSS 风险？dangerouslySetInnerHTML 是否经过净化
+安全,🟡,安全工程师,CSRF 防护是否到位？SameSite Cookie 是否设置
+安全,🟡,安全工程师,环境变量是否正确分层？NEXT_PUBLIC_ 仅用于公开信息
+安全,🟡,安全工程师,是否使用了 Content-Security-Policy 头？
+兼容性,🟡,前端工程师,目标浏览器是否已明确？检查 browserslist 配置
+兼容性,🟡,前端工程师,CSS 是否使用了目标浏览器不支持的特性？检查 caniuse
+兼容性,🟡,前端工程师,响应式断点是否覆盖移动端/平板/桌面？Tailwind sm/md/lg/xl
+兼容性,🟡,前端工程师,触摸交互是否适配？点击区域是否 >= 44x44px
+兼容性,🔴,无障碍专家,键盘导航是否完整？所有交互元素是否可通过 Tab 到达
+兼容性,🔴,无障碍专家,是否有 aria-label / role？屏幕阅读器是否能理解
+兼容性,🟡,无障碍专家,颜色对比度是否达标？WCAG AA 标准 4.5:1

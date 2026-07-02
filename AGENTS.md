@@ -28,7 +28,7 @@ ECC-RSK 提供 22 个 specialized agents，其中 17 个复用 ECC（通过 syml
 
 ---
 
-## ECC-RSK 新增的 Agents（5 个）
+## ECC-RSK 新增的 Agents（8 个）
 
 | Agent | 职责 | 触发时机 |
 |---|---|---|
@@ -37,6 +37,9 @@ ECC-RSK 提供 22 个 specialized agents，其中 17 个复用 ECC（通过 syml
 | `nextjs-reviewer` | Next.js App Router 专项审查（RSC 边界、Server Actions、缓存） | Next.js 相关代码修改 |
 | `vercel-deployer` | Vercel 部署配置与优化（环境变量、运行时、性能） | 部署前检查、部署执行 |
 | `fullstack-architect` | React+Next.js+Supabase 整体架构设计（数据流、认证流、类型安全） | 新项目架构设计、重大重构 |
+| `ux-reviewer` | 体验专项审查（交互完整性、视觉一致性、微交互、信息架构） | UI 组件修改、页面开发、体验迭代 |
+| `feature-reviewer` | 功能完整性审查（需求覆盖度、竞品对标、A/B 实验设计、边界场景） | 新功能开发、功能增强、PR 审查 |
+| `observability-reviewer` | 可观测性审查（错误监控、性能追踪、日志链路、告警机制） | 上线前检查、可观测性建设 |
 
 ---
 
@@ -127,6 +130,7 @@ ECC 的以下 ECC 内部系统命令也已排除（未 symlink）：
 - `/react-review` → 调用 `react-reviewer`
 - `/supabase-review` → 调用 `supabase-reviewer`
 - `/nextjs-review` → 调用 `nextjs-reviewer`
+- `/multi-review` → 调用 `multi-angle-review` skill（编排多 Agent 并行审查）
 - `/plan` → 调用 `planner`
 
 ### 直接调用（Claude Code）
